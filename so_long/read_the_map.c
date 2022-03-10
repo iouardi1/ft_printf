@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_the_map.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/10 17:12:13 by iouardi           #+#    #+#             */
+/*   Updated: 2022/03/10 17:12:41 by iouardi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
-char	**read_the_map(int fd)
+void	read_the_map(t_game *game, int fd)
 {
 	char	*tab;
 	char	*temp;
-	char	**arr;
 
 	tab = get_next_line(fd);
 	temp = NULL;
@@ -13,18 +24,5 @@ char	**read_the_map(int fd)
 		temp = ft_strjoin(temp, tab);
 		tab = get_next_line(fd);
 	}
-	arr = ft_split(temp, '\n');
-	return (arr);
+	game->mapy->arr = ft_split(temp, '\n');
 }
-// int main()
-// {
-// 	char	**arr;
-// 	int i;
-// 	int fd = open("my_map.ber", O_RDONLY);
-// 	arr = read_the_map(fd);
-// 	while (arr[i])
-// 	{
-// 		printf("%s\n", arr[i]);
-// 		i++;
-// 	}
-// }

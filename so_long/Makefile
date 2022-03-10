@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/14 16:41:34 by iouardi           #+#    #+#              #
-#    Updated: 2022/03/07 17:04:26 by iouardi          ###   ########.fr        #
+#    Updated: 2022/03/10 23:37:10 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,9 @@ SRC_FILES_BONUS = libft/ft_lstnew_bonus.c \
 SRC_FILES = so_long.c \
 			draw_map.c \
 			read_the_map.c \
-			parsing_map.c
+			parsing_map.c \
+			link_pictures_initialize_check_parsing.c \
+			parsing_map2.c
 GNL_FILES = gnl/get_next_line.c gnl/get_next_line_utils.c
 OBJ_FILES=			$(SRC_FILES:.c=.o)
 OBJ_FILES_BONUS=	$(SRC_FILES_BONUS:.c=.o)

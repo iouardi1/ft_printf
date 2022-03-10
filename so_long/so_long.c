@@ -6,117 +6,106 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:14:43 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/09 00:43:48 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/10 23:30:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	try_harder(t_game *game, int a)
 {
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (a == 125)
+	{
+		if (mp->arr[(pl->y / 75) + 1][(pl->x / 75)] != '1')
+			pl->y += 75;
+		pl->move = "do";
+	}
+	if (a == 126)
+	{
+		if (mp->arr[(pl->y / 75) - 1][(pl->x / 75)] != '1')
+			pl->y -= 75;
+		pl->move = "up";
+	}
+	if (a == 123)
+	{
+		if (mp->arr[(pl->y / 75)][(pl->x / 75) - 1] != '1')
+			pl->x -= 75;
+		pl->move = "le";
+	}
+	if (a == 124)
+	{
+		if (mp->arr[(pl->y / 75)][(pl->x / 75) + 1] != '1')
+			pl->x += 75;
+		pl->move = "ri";
+	}
 }
 
-int try(int a, t_game *game)// worth every penis
+int	try(int a, t_game *game)
 {
-	if (a == 125 && game->mapy->arr[(game->tanjiro->y / 75) + 1][(game->tanjiro->x / 75)] != '1') // lte7t
-	{
-		game->tanjiro->y += height_tile;
-		game->tanjiro->move = "do";
-	}
-	if (a == 126 && game->mapy->arr[(game->tanjiro->y / 75) - 1][(game->tanjiro->x / 75)] != '1') //up
-	{
-		game->tanjiro->y -= height_tile;
-		game->tanjiro->move = "up";
-	}
-	if (a == 123 && game->mapy->arr[(game->tanjiro->y / 75)][((game->tanjiro->x - 15) / 75) - 1] != '1') //left
-	{
-		game->tanjiro->x -= width_tile;
-		game->tanjiro->move = "le";
-	}
-	if (a == 124 && game->mapy->arr[(game->tanjiro->y / 75)][((game->tanjiro->x - 15) / 75) + 1] != '1') //right
-	{
-		game->tanjiro->x += width_tile;
-		game->tanjiro->move = "ri";
-	}
-	if (game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75)] == 'C')
-	{
-		game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75)] = '0';
-		game->tanjiro->eaten_collect++;
-	}
-	mlx_clear_window(game->mlx.mlx, game->mlx.mlx_win);
-	game->img.img = mlx_new_image(game->mlx.mlx, game->mapy->height, game->mapy->width);
-	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bits_per_pixel, &game->img.line_length, &game->img.endian);
+	if (a == 53)
+		exit(0);
+	try_harder(game, a);
+	eaten_collect(game);
+	mlx_clear_window(ml.mlx, ml.mlx_win);
+	im.img = mlx_new_image(ml.mlx, mp->height, mp->width);
+	im.addr = mlx_get_data_addr(im.img, \
+		&im.bits_per_pixel, &im.line_length, &im.endian);
 	draw_map2(game);
-	return 0;
+	return (0);
 }
 
-void	draw_player(t_game *game)
+void	eaten_collect(t_game *game)
 {
-	if (!ft_strncmp(game->tanjiro->move, "do", 3))
+	if (mp->arr[(pl->y / 75)][(pl->x / 75)] == 'C')
 	{
-		game->mlx.color = mlx_xpm_file_to_image(game->mlx.mlx_win, "./images_xpm/tanjiro_xpm_moves/frontlook_tanjiro75.xpm", &width_tile, &height_tile);
-		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mlx.color, game->tanjiro->x, game->tanjiro->y);
+		mp->arr[(pl->y / 75)][(pl->x / 75)] = '0';
+		pl->eaten_collect++;
 	}
-	else if (!ft_strncmp(game->tanjiro->move, "up", 3))
-	{
-		game->mlx.color = mlx_xpm_file_to_image(game->mlx.mlx_win, "./images_xpm/tanjiro_xpm_moves/backlook_tanjiro75 .xpm", &width_tile, &height_tile);
-		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mlx.color, game->tanjiro->x, game->tanjiro->y);
-	}
-	else if (!ft_strncmp(game->tanjiro->move, "ri", 3))
-	{
-		game->mlx.color = mlx_xpm_file_to_image(game->mlx.mlx_win, "./images_xpm/tanjiro_xpm_moves/rightlook_tanjiro75.xpm", &width_tile, &height_tile);
-		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mlx.color, game->tanjiro->x, game->tanjiro->y);
-	}
-	else if (!ft_strncmp(game->tanjiro->move, "le", 3))
-	{
-		game->mlx.color = mlx_xpm_file_to_image(game->mlx.mlx_win, "./images_xpm/tanjiro_xpm_moves/leftlook_tanjiro75.xpm", &width_tile, &height_tile);
-		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mlx.color, game->tanjiro->x, game->tanjiro->y);
-	}
+	if (pl->eaten_collect == mp->collects && \
+		mp->arr[(pl->y / 75)][(pl->x / 75)] == 'E')
+		exit(0);
 }
 
-int	main(void)
+int	draw_player_supports(t_game *game)
 {
-	t_game *game;
-	int		fd = open("my_map.ber", O_RDONLY);
-	char	*relative_path = "./images_xpm/nizku75.xpm";
-	width_tile = 75;
-	height_tile = 75;
-	
+	int		w;
+	int		h;
+
+	if (!ft_strncmp(pl->move, "do", 3))
+	{
+		mp->player = mlx_xpm_file_to_image(ml.mlx_win, \
+			"./images_xpm/frontlook.xpm", &w, &h);
+		mlx_put_image_to_window(ml.mlx, ml.mlx_win, mp->player, pl->x, pl->y);
+		return (0);
+	}
+	else if (!ft_strncmp(pl->move, "up", 3))
+	{
+		mp->player = mlx_xpm_file_to_image(ml.mlx_win, \
+			"./images_xpm/backlook.xpm", &w, &h);
+		mlx_put_image_to_window(ml.mlx, ml.mlx_win, mp->player, pl->x, pl->y);
+		return (0);
+	}
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_game	*game;
+
 	game = malloc(sizeof(t_game));
-	game->mapy = malloc(sizeof(t_mapy));
-	game->mapy->arr = read_the_map(fd);
-	game->mlx.mlx = mlx_init();
-	game->mapy->h_ntiles = 0;
-	game->tanjiro = malloc(sizeof(t_player));
-	game->tanjiro->eaten_collect = 0;
-	game->tanjiro->move = malloc(sizeof(char) * 3);
-	
-	if (!parsing_map(game))
+	if (argc == 2)
 	{
-		printf("heeeeeere\n");
-		return(0);
+		initialize(game, argv[1]);
+		if (!check_parsing(game))
+			return (0);
+		ml.mlx_win = mlx_new_window(ml.mlx, \
+		mp->height, mp->width, "Tanjirooooo");
+		im.img = mlx_new_image(ml.mlx, mp->height, mp->width);
+		im.addr = mlx_get_data_addr(im.img, \
+			&im.bits_per_pixel, &im.line_length, &im.endian);
+		draw_map(game);
+		mlx_hook(ml.mlx_win, 2, 0, try, game);
+		mlx_loop(ml.mlx);
 	}
-	while (game->mapy->arr[game->mapy->h_ntiles])
-	{
-		game->mapy->v_ntiles = 0;
-		while(game->mapy->arr[game->mapy->h_ntiles][game->mapy->v_ntiles])
-			game->mapy->v_ntiles++;
-		game->mapy->h_ntiles++;
-	}
-	game->mapy->height = game->mapy->v_ntiles * width_tile;
-	game->mapy->width = game->mapy->h_ntiles * height_tile;
-	game->mlx.mlx_win = mlx_new_window(game->mlx.mlx, game->mapy->height, game->mapy->width, "Tanjirooooo");
-	game->img.img = mlx_new_image(game->mlx.mlx, game->mapy->height, game->mapy->width);
-	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bits_per_pixel, &game->img.line_length, &game->img.endian);
-	game->mlx.color = mlx_xpm_file_to_image(game->mlx.mlx, relative_path, &game->img.img_width, &game->img.img_height);
-	draw_map(game);
-	// printf("%d   %d", game->mapy->v_ntiles, game->mapy->h_ntiles);
-	//mlx_key_hook(game->mlx.mlx_win, try, game); // new
-	mlx_hook(game->mlx.mlx_win, 2, 1L >> 1, try, game); //
-	// (arr, color, mlx, mlx_win); /// new
-	mlx_loop(game->mlx.mlx);
+	return (0);
 }
