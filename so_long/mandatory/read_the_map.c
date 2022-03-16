@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 17:12:13 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/14 18:43:11 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/16 22:19:29 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	read_the_map(t_game *game, int fd)
 	char	*temp;
 	char	*temp2;
 
-	tab = get_next_line(fd);
 	temp = NULL;
+	tab = get_next_line(fd);
 	while (tab)
 	{
 		temp2 = temp;
@@ -27,8 +27,14 @@ void	read_the_map(t_game *game, int fd)
 		free (tab);
 		free (temp2);
 		tab = get_next_line(fd);
+		if(tab == NULL)
+			break;
+		if (ft_strlen(tab) == 1)
+		{
+			printf("map invalid a 3chiri!\n");
+			exit (0);
+		}
 	}
-	temp2 = temp;
 	game->mapy->arr = ft_split(temp, '\n');
-	free (temp2);
+	free(temp);                                                                                                                   
 }

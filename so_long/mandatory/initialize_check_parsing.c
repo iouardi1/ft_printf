@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 17:14:37 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/14 18:00:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/16 22:42:49 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	link_pictures(t_game *game)
 	int		height_tile;
 	int		width_tile;
 
-	mp->wall = mlx_xpm_file_to_image(ml.mlx, \
+	game->mapy->wall = mlx_xpm_file_to_image(game->mlx.mlx, \
 		"mandatory/images_xpm/wall.xpm", &width_tile, &height_tile);
-	mp->collect = mlx_xpm_file_to_image(ml.mlx, \
+	game->mapy->collect = mlx_xpm_file_to_image(game->mlx.mlx, \
 		"mandatory/images_xpm/nizku75.xpm", &width_tile, &height_tile);
-	mp->exit = mlx_xpm_file_to_image(ml.mlx, \
+	game->mapy->exit = mlx_xpm_file_to_image(game->mlx.mlx, \
 		"mandatory/images_xpm/nizku_box.xpm", &width_tile, &height_tile);
-	mp->player = mlx_xpm_file_to_image(ml.mlx, \
+	game->mapy->player = mlx_xpm_file_to_image(game->mlx.mlx, \
 		"mandatory/images_xpm/frontlook.xpm", &width_tile, &height_tile);
 }
 
@@ -36,9 +36,10 @@ void	initialize(t_game *game, char *map_file)
 	game->tanjiro = malloc(sizeof(t_player));
 	game->tanjiro->move = malloc(sizeof(char) * 3);
 	read_the_map(game, fd);
-	ml.mlx = mlx_init();
+	game->mlx.mlx = mlx_init();
 	game->mapy->h_ntiles = 0;
 	game->tanjiro->eaten_collect = 0;
+	game->tanjiro->count_moves = 0;
 }
 
 int	check_parsing(t_game *game)
@@ -49,10 +50,10 @@ int	check_parsing(t_game *game)
 		return (0);
 	}
 	link_pictures(game);
-	while (mp->arr[mp->h_ntiles])
-		mp->h_ntiles++;
-	mp->v_ntiles = ft_strlen(mp->arr[0]);
-	mp->height = mp->v_ntiles * 75;
-	mp->width = mp->h_ntiles * 75;
+	while (game->mapy->arr[game->mapy->h_ntiles])
+		game->mapy->h_ntiles++;
+	game->mapy->v_ntiles = ft_strlen(game->mapy->arr[0]);
+	game->mapy->height = game->mapy->v_ntiles * 75;
+	game->mapy->width = game->mapy->h_ntiles * 75;
 	return (1);
 }

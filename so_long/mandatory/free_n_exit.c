@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 18:11:30 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/15 12:48:57 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/16 16:40:30 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ void	free_map(t_game *game)
 	int		i;
 
 	i = 0;
-	// if (!game->mapy->arr)
-	// {
-	// 	free(game->mapy->arr);
-	// 	return;
-	// }
 	while (game->mapy->arr[i])
 	{
 		free(game->mapy->arr[i]);
@@ -35,23 +30,23 @@ void	free_imgs(t_game *game)
 {
 	if (game->mapy->wall)
 	{
-		game->mapy->wall = NULL;
-		free(game->mapy->wall);
+		// game->mapy->wall = NULL;
+		free(NULL);
 	}
 	if (game->mapy->collect)
 	{
-		game->mapy->collect = NULL;
-		free(game->mapy->collect);
+		// game->mapy->collect = NULL;
+		free(NULL);
 	}
 	if (game->mapy->exit)
 	{
-		game->mapy->exit = NULL;
-		free(game->mapy->exit);
+		// game->mapy->exit = NULL;
+		free(NULL);
 	}
 	if (game->mapy->player)
 	{
-		game->mapy->player = NULL;
-		free(game->mapy->player);
+		// game->mapy->player = NULL;
+		free(NULL);
 	}
 }
 
@@ -67,11 +62,11 @@ void	free_struct(t_game *game)
 
 void	free_n_exit(t_game *game)
 {
-	free_map(game);
-	free_imgs(game);
-	free_struct(game);
-	free(game);
-	// system ("leaks so_long");
-	// (void)game;
+	(void)game;
+	// free_map(game);
+	// free_imgs(game);
+	// free_struct(game);
+	// free(game);
+	system ("leaks so_long");
 	exit(0);
 }

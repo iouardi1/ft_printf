@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 23:44:07 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/15 12:44:26 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/16 22:44:39 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,12 @@
 # include "libft/libft.h"
 # include "gnl/get_next_line.h"
 
-# define mp game->mapy
-# define ml game->mlx
-# define pl game->tanjiro
-# define im game->img
-
 typedef struct s_player {
 	int		x;
 	int		y;
 	int		eaten_collect;
 	char	*move;
+	int		count_moves;
 }	t_player;
 
 typedef struct s_mapy {
@@ -83,10 +79,11 @@ int		check_vertical_walls(t_game *game);
 int		check_horizontal_walls(t_game *game);
 void	eaten_collect(t_game *game);
 int		check_parsing(t_game *game);
-int		clooose(int keycode, t_game *game);
+int		clooose(t_game *game);
 void	free_map(t_game *game);
 void	free_imgs(t_game *game);
 void	free_struct(t_game *game);
 void	free_n_exit(t_game *game);
+void	here(t_game *game);
 
 #endif

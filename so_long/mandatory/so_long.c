@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 21:14:43 by iouardi           #+#    #+#             */
-/*   Updated: 2022/03/15 12:56:14 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/03/16 22:40:58 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,64 +16,80 @@ void	try_harder(t_game *game, int a)
 {
 	if (a == 125)
 	{
-		if (mp->arr[(pl->y / 75) + 1][(pl->x / 75)] != '1')
-			pl->y += 75;
-		pl->move = strcpy(pl->move, "do");
+		if (game->mapy->arr[(game->tanjiro->y / 75) + 1][(game->tanjiro->x / 75)] != '1')
+		{
+			game->tanjiro->count_moves += 1;
+			printf("%d\n", game->tanjiro->count_moves);
+			game->tanjiro->y += 75;
+		}
+		free(game->tanjiro->move);
+		game->tanjiro->move = ft_strdup("do");
 	}
 	if (a == 126)
 	{
-		if (mp->arr[(pl->y / 75) - 1][(pl->x / 75)] != '1')
-			pl->y -= 75;
-		pl->move = strcpy(pl->move, "up");
+		if (game->mapy->arr[(game->tanjiro->y / 75) - 1][(game->tanjiro->x / 75)] != '1')
+		{
+			game->tanjiro->count_moves += 1;
+			printf("%d\n", game->tanjiro->count_moves);
+			game->tanjiro->y -= 75;
+		}
+		free(game->tanjiro->move);
+		game->tanjiro->move = ft_strdup("up");
 	}
 	if (a == 123)
 	{
-		if (mp->arr[(pl->y / 75)][(pl->x / 75) - 1] != '1')
-			pl->x -= 75;
-		pl->move = strcpy(pl->move, "le");
+		if (game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75) - 1] != '1')
+		{
+			game->tanjiro->count_moves += 1;
+			printf("%d\n", game->tanjiro->count_moves);	
+			game->tanjiro->x -= 75;
+		}
+		free(game->tanjiro->move);
+		game->tanjiro->move = ft_strdup("le");
 	}
 	if (a == 124)
 	{
-		if (mp->arr[(pl->y / 75)][(pl->x / 75) + 1] != '1')
-			pl->x += 75;
-		pl->move = strcpy(pl->move, "ri");
+		if (game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75) + 1] != '1')
+		{
+			game->tanjiro->count_moves += 1;
+			printf("%d\n", game->tanjiro->count_moves);	
+			game->tanjiro->x += 75;
+		}
+		free(game->tanjiro->move);
+		game->tanjiro->move = ft_strdup("ri");
 	}
 }
 
 int	try(int a, t_game *game)
 {
 	if (a == 53)
-		free_n_exit(game);
-		// exit(0);
+		exit (0);
 	try_harder(game, a);
 	eaten_collect(game);
-	mlx_clear_window(ml.mlx, ml.mlx_win);
-	im.img = mlx_new_image(ml.mlx, mp->height, mp->width);
-	im.addr = mlx_get_data_addr(im.img, \
-		&im.bits_per_pixel, &im.line_length, &im.endian);
+	mlx_clear_window(game->mlx.mlx, game->mlx.mlx_win);
+	game->img.img = mlx_new_image(game->mlx.mlx, game->mapy->height, game->mapy->width);
+	game->img.addr = mlx_get_data_addr(game->img.img, \
+		&game->img.bits_per_pixel, &game->img.line_length, &game->img.endian);
 	draw_map2(game);
 	return (0);
 }
 
 void	eaten_collect(t_game *game)
 {
-	if (mp->arr[(pl->y / 75)][(pl->x / 75)] == 'C')
+	if (game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75)] == 'C')
 	{
-		mp->arr[(pl->y / 75)][(pl->x / 75)] = '0';
-		pl->eaten_collect++;
+		game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75)] = '0';
+		game->tanjiro->eaten_collect++;
 	}
-	if (pl->eaten_collect == mp->collects && \
-		mp->arr[(pl->y / 75)][(pl->x / 75)] == 'E')
-		free_n_exit(game);
-		// exit(0);
+	if (game->tanjiro->eaten_collect == game->mapy->collects && \
+		game->mapy->arr[(game->tanjiro->y / 75)][(game->tanjiro->x / 75)] == 'E')
+		exit (0);
 }
 
-int	clooose(int keycode, t_game *game)
+int	clooose(t_game *game)
 {
-	(void)keycode;
-	(void)game;
-	free_n_exit(game);
-	return (0);
+	free(game);
+	exit (0);
 }
 
 int	draw_player_supports(t_game *game)
@@ -81,18 +97,18 @@ int	draw_player_supports(t_game *game)
 	int		w;
 	int		h;
 
-	if (!ft_strncmp(pl->move, "do", 3))
+	if (!ft_strncmp(game->tanjiro->move, "do", 3))
 	{
-		mp->player = mlx_xpm_file_to_image(ml.mlx_win, \
+		game->mapy->player = mlx_xpm_file_to_image(game->mlx.mlx_win, \
 			"mandatory/images_xpm/frontlook.xpm", &w, &h);
-		mlx_put_image_to_window(ml.mlx, ml.mlx_win, mp->player, pl->x, pl->y);
+		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mapy->player, game->tanjiro->x, game->tanjiro->y);
 		return (0);
 	}
-	else if (!ft_strncmp(pl->move, "up", 3))
+	else if (!ft_strncmp(game->tanjiro->move, "up", 3))
 	{
-		mp->player = mlx_xpm_file_to_image(ml.mlx_win, \
+		game->mapy->player = mlx_xpm_file_to_image(game->mlx.mlx_win, \
 			"mandatory/images_xpm/backlook.xpm", &w, &h);
-		mlx_put_image_to_window(ml.mlx, ml.mlx_win, mp->player, pl->x, pl->y);
+		mlx_put_image_to_window(game->mlx.mlx, game->mlx.mlx_win, game->mapy->player, game->tanjiro->x, game->tanjiro->y);
 		return (0);
 	}
 	return (1);
@@ -101,17 +117,18 @@ int	draw_player_supports(t_game *game)
 int	main(int argc, char **argv)
 {
 	t_game	*game;
-
+	
 	game = malloc(sizeof(t_game));
 	if (argc == 2)
 	{
 		initialize(game, argv[1]);
 		if (!check_parsing(game))
-			free_n_exit(game);
+			exit (0);
 		draw_map(game);
-		mlx_hook(ml.mlx_win, 2, 0, try, game);
-		mlx_hook(ml.mlx_win, 17, 1L<<5, clooose, game);
-		mlx_loop(ml.mlx);
+		mlx_hook(game->mlx.mlx_win, 2, 0, try, game);
+		mlx_hook(game->mlx.mlx_win, 17, 1L<<5, clooose, game);
+		mlx_loop(game->mlx.mlx);
 	}
+	free(game);
 	return (0);
 }
